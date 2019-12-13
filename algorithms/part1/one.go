@@ -1,5 +1,7 @@
 package part1
 
+import "math"
+
 // 给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
 // 你可以假设每种输入只会对应一个答案。但是，你不能重复利用这个数组中同样的元素。
 // 示例:
@@ -104,7 +106,9 @@ func lengthOfLongestSubstring(s string) int {
 // [2], [3] i:0 j:0 c:1 o:f
 // nums1 = [1, 3]
 // nums2 = [2]   i:0 j:0 c:1 o:t
-
+// [1,3,5,7], [2,4,6] i:1 j:1 c:4 o:t
+// [1,3,5,7,9], [2,4,6,8] i:2 j:1 c:5 o:t
+// [1,3,5,7,9,11], [2,4,6,8,10] i:2 j:2 c:6 o:t
 // 则中位数是 2.0
 // 示例 2:
 
@@ -112,3 +116,81 @@ func lengthOfLongestSubstring(s string) int {
 // nums2 = [3, 4] i:1 j:0 c:2 o:f
 
 // 则中位数是 (2 + 3)/2 = 2.5
+
+// 4 寻找两个有序数组的中位数
+func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
+	i, j, l1, l2 := 0, 0, len(nums1), len(nums2)
+	odd := (l1+l2)%2 == 1
+	current := 0
+	center := (l1 + l2) / 2
+	if !odd {
+		center--
+	}
+
+	if l1 == 0 || l2 == 0 {
+		var nums []int
+		if l1 == 0 {
+			nums = nums2
+		} else {
+			nums = nums1
+		}
+		ll := len(nums)
+		for ii := 0; ii < ll; ii++ {
+			if ii >= center {
+				if odd {
+					return float64(nums[ii])
+				}
+				return (float64(nums[ii]) + float64(nums[ii+1])) / 2
+			}
+		}
+
+	} else {
+
+		for i < l1 || j < l2 {
+			if current >= center {
+				if odd {
+					return math.Min(float64(nums1[i]), float64(nums2[j]))
+				}
+				a := 0.0
+				b := 0.0
+				if nums1[i] < nums2[j] {
+					a = float64(nums1[i])
+					if i < l1-1 {
+						b = math.Min(float64(nums1[i+1]), float64(nums2[j]))
+					} else {
+						b = float64(nums2[j])
+					}
+				} else {
+					a = float64(nums1[i])
+					if j < l2-1 {
+						b = math.Min(float64(nums1[i]), float64(nums2[j+1]))
+					} else {
+						b = float64(nums1[i])
+					}
+				}
+				return (a + b) / 2
+			}
+			if nums1[i] <= nums2[j] && i < l1-1 {
+				i++
+			} else {
+				j++
+			}
+			current++
+		}
+	}
+
+	return 0
+}
+
+func findMedianSortedArrays2(nums1 []int, nums2 []int) float64 {
+	a, b := nums1, nums2
+	if len(a) < len(b) {
+		a, b = b, a
+	}
+	m, n := len(a), len(b)
+
+	i := m / 2
+	j := (m+n+1)/2 - 1
+
+	return 0
+}

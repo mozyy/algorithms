@@ -72,3 +72,23 @@ func BenchmarkLengthOfLongestSubstring(b *testing.B) {
 		lengthOfLongestSubstring("abcabcbb")
 	}
 }
+
+func TestFindMedianSortedArrays(t *testing.T) {
+	args := map[float64][][]int{
+		// 4:   [][]int{[]int{1, 3, 5, 7}, []int{2, 4, 6}},
+		// 1.5: [][]int{[]int{1}, []int{2}},
+		3.5: [][]int{[]int{1, 3}, []int{2, 4, 5, 6}},
+		5:   [][]int{[]int{1, 3, 5, 7, 9}, []int{2, 4, 6, 8}},
+		// 1:   [][]int{[]int{}, []int{1}},
+		// 2:   [][]int{[]int{}, []int{1, 2, 3}},
+		2.5: [][]int{[]int{}, []int{1, 2, 3, 4}},
+		1:   [][]int{[]int{1, 2}, []int{1, 1}},
+		2:   [][]int{[]int{2, 2, 2, 2}, []int{2, 2, 2}},
+	}
+	for want, value := range args {
+		result := findMedianSortedArrays2(value[0], value[1])
+		if result != want {
+			t.Errorf("want: %f, result: %f\n", want, result)
+		}
+	}
+}
